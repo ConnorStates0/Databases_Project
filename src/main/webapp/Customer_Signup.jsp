@@ -12,6 +12,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign Up</title>
+    <style>
+      .button-container {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 9999;
+      }
+      .my-button {
+        display: inline-block;
+        padding: 10px;
+        background-color: darkgray;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+    </style>
   </head>
   <body>
     <%
@@ -19,6 +36,9 @@
       Class.forName("org.postgresql.Driver");
       Connection db = DriverManager.getConnection(url, "postgres", "1234");
     %>
+    <div class = "button-container">
+      <button class="my-button" onclick="location.href='index.jsp'">Home Page</button>
+    </div>
     <h1>SIGN UP</h1>
     <form method = "POST" action="Customer_Signup.jsp">
       <input type="text" name="lname" placeholder="Last Name" />

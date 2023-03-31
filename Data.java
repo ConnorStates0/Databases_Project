@@ -1,11 +1,18 @@
-package com.jspData;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Data{
     public static void main(String[] var0) {
+        /**java.sql.Date sqldate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+         addCustomer("121-121-121","goldthwait", "bobcat", "100 the moon lane", "6592659638", sqldate);**/
+        searchBookings("Grimes", "rgrimes@hotmail.com");
+
     }
+
+    public static void Available() {
+        System.out.println("1231231312312312312213");
+    }
+
     public static void terminate(int emp_num) {
         try {
             Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Groupproject", "postgres", "1234");
@@ -118,37 +125,16 @@ public class Data{
         }
     }
 
-    public static ArrayList<String> searchBookings(String LastName, String Email){
-        ArrayList<String> info = new ArrayList<String>();
+    public static void searchBookings(String LastName, String Email){
         try {
             Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Groupproject", "postgres", "1234");
             Statement st = db.createStatement();
-            ResultSet rs = st.executeQuery("SELECT address FROM hotels WHERE contact_phone = (SELECT contact_phone from has WHERE room_id = (SELECT room_id FROM rents WHERE sin = (SELECT sin FROM customers where email = '"+Email+"' AND family_name ='"+LastName+"')))");
+            ResultSet rs = st.executeQuery("SELECT address, num_of_rooms FROM hotels WHERE contact_phone = (SELECT contact_phone from has WHERE room_id = (SELECT room_id FROM rents WHERE sin = (SELECT sin FROM customers where email = '"+Email+"' AND family_name ='"+LastName+"')))");
             rs.next();
-            info.add(rs.getString(1));
-            rs = st.executeQuery("SELECT COUNT(room_id) FROM rents WHERE sin = (SELECT sin FROM customers where email = '"+Email+"' AND family_name ='"+LastName+"')");
-            rs.next();
-            info.add(rs.getString(1));
+            System.out.println(rs.getString(1) +" "+ rs.getString(2));
             rs = st.executeQuery("SELECT chain_name FROM belongs_to WHERE contact_phone = (SELECT contact_phone from has WHERE room_id = (SELECT room_id FROM rents WHERE sin = (SELECT sin FROM customers where email = '"+Email+"' AND family_name ='"+LastName+"')))");
             rs.next();
-            info.add(rs.getString(1));
-            rs = st.executeQuery("SELECT sin FROM customers where email = '"+Email+"' AND family_name ='"+LastName+"'");
-            rs.next();
-            info.add(rs.getString(1));
-            st.close();
-            db.close();
-
-        } catch (SQLException exception) {
-            System.out.println(" An exception was thrown:" + exception.getMessage());
-        }
-        return info;
-    }
-
-    public static void approveBookings(String sin, String Card){
-        try {
-            Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Groupproject", "postgres", "1234");
-            Statement st = db.createStatement();
-            st.execute("UPDATE rents SET approved = 'true', credit_card = '"+Card+"' WHERE sin = '"+sin+"'");
+            System.out.println(rs.getString(1));
             st.close();
             db.close();
         } catch (SQLException exception) {
@@ -156,33 +142,4 @@ public class Data{
         }
     }
 
-    public static ArrayList<String> RoomSearch(String Start, String End, String RoomCapacity, String Hotel_chain, int Price, String Sea_view, String Extendable){
-        ArrayList<String> roomids = new ArrayList<String>();
-        String entry;
-        try {
-            Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Groupproject", "postgres", "1234");
-            Statement st = db.createStatement();
-            ResultSet rs = st.executeQuery("SELECT room_id,price,amenities,problems,contact_phone,rating,address FROM rooms CROSS JOIN hotels WHERE room_id in (SELECT room_id from rents where (CAST('"+Start+"' AS DATE) not between start_date AND end_date) AND (CAST('"+End+"' AS DATE) not between start_date AND end_date) AND room_id in (Select room_id from rooms where sea_view = "+Sea_view+" and is_extendable = "+Extendable+" and capacity = '"+RoomCapacity+"' and price <= "+Price+" and room_id in (select room_id from has where contact_phone in (select contact_phone from belongs_to where chain_name = '"+Hotel_chain+"'))))");
-            while (rs.next()){
-                entry = rs.getString(1)+", "+rs.getString(2)+", "+rs.getString(3)+", "+rs.getString(4)+", "+rs.getString(5)+", "+rs.getString(6)+", "+rs.getString(7);
-                roomids.add(entry);
-            }
-            st.close();
-            db.close();
-        } catch (SQLException exception) {
-            System.out.println(" An exception was thrown:" + exception.getMessage());
-        }
-        return roomids;
-    }
-
-    public static void BookRoom(String sin, int roomid, String start, String end){
-        try {
-            Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Groupproject", "postgres", "1234");
-            Statement st = db.createStatement();
-            st.execute("INSERT INTO rents(sin, room_id, credit_card,approved,start_date,end_date) VALUES ('"+sin+"',"+roomid+",Null,NULL,'"+start+"','"+end+"')");
-
-        } catch (SQLException exception) {
-            System.out.println(" An exception was thrown:" + exception.getMessage());
-        }
-    }
 }
