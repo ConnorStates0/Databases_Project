@@ -1,4 +1,11 @@
-<!DOCTYPE html>
+<%@page language="java" contentType="text/html; charset=utf-8" pageEncoding="UTF-8"%>
+<%@ page import="com.jspData.Data"%>
+<%@ page import="java.sql.*" %>
+<%@ page import="javax.print.DocFlavor" %>
+<%@ page import= "java.text.DateFormat"%>
+<%@ page import= "java.util.Calendar"%>
+<%@ page import="javax.swing.plaf.nimbus.State" %>
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,34 +14,35 @@
     <title>Sign Up</title>
   </head>
   <body>
+    <%
+      String url = "jdbc:postgresql://localhost:5432/Groupproject";
+      Class.forName("org.postgresql.Driver");
+      Connection db = DriverManager.getConnection(url, "postgres", "1234");
+    %>
     <h1>SIGN UP</h1>
-    <div id="lname-in" name="lname-in" class="user-inputs">
-      <label for="lname">Last Name:</label>
-      <input type="text" id="lname" name="lname" />
-    </div>
-
-    <div id="fname-in" name="fname-in" class="user-inputs">
-      <label for="fname">First name:</label>
-      <input type="text" id="fname" name="fname" />
-    </div>
-
-    <div id="email-in" name="email-in" class="user-inputs">
-      <label for="email">Email:</label>
-      <input type="text" id="email" name="email" />
-    </div>
-
-    <div id="address-in" name="address-in" class="user-inputs">
-      <label for="address">Address:</label>
-      <input type="text" id="address" name="address" />
-    </div>
-
-    <div id="sin-in" name="sin-in" class="user-inputs">
-      <label for="SIN">Social Insurance Number:</label>
-      <input type="text" id="sin" name="sin" />
-    </div>
-
-    <button id="confim-button" name="confirm-button" class="user-inputs">
-      Confirm
+    <form method = "POST" action="Customer_Signup.jsp">
+      <input type="text" name="lname" placeholder="Last Name" />
+      </br>
+      <input type="text" name="fname" placeholder="First Name" />
+      </br>
+      <input type="text" name="email" placeholder="Email" />
+      </br>
+      <input type="text" name="address" placeholder="Address" />
+      </br>
+      <input type="text" name="sin" placeholder="SIN" />
+      </br>
+      <button onclick="<%
+      if (request.getParameter("lname") != null && request.getParameter("fname") != null && request.getParameter("email") != null && request.getParameter("address") != null && request.getParameter("sin") != null){
+            String lname = request.getParameter("lname");
+            String fname = request.getParameter("fname");
+            String email = request.getParameter("email");
+            String address = request.getParameter("address");
+            String sin = request.getParameter("sin");
+            Data.addCustomer(sin, lname, fname, email, address);
+        }%>" >Register</button>
+    </form>
+    <button type="button" onclick="location.href='Customer_Room_Search.jsp';">
+      Book a room!
     </button>
   </body>
 </html>

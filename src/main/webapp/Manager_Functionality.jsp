@@ -90,16 +90,17 @@
             <div id="jobinputs" style="display: none">
                 <input type="text" name="chain_name" placeholder="Chain Name">
                 <input type="text" name="contact_phone" placeholder="Contact Phone">
+                <input type="text" name="position_title" placeholder="Position Title">
             </div>
             </br>
             <button onclick="<%
             if(request.getParameter("empID") != null){
                 int ID = Integer.parseInt(request.getParameter("empID"));
-                if(request.getParameter("column").equals("job")){
-                    System.out.println("true");
+                if(request.getParameter("column").equals("Job")){
                     String phone = request.getParameter("contact_phone");
                     String chain = request.getParameter("chain_name");
-                    Data.UpdatePosition(phone,chain,ID);
+                    String position = request.getParameter("position_title");
+                    Data.UpdatePosition(phone,chain,position,ID);
                 }else{
                         if(request.getParameter("input")!=null){
                             String column = request.getParameter("column");
@@ -129,6 +130,8 @@
             </br>
             <input type="text" name="contactphone" placeholder="Contact Phone">
             </br>
+            <input type="text" name="title" placeholder="Position Title">
+            </br>
             <input type="text" name="Sin" placeholder="SIN">
             </br>
             <input type="text" name="familyname" placeholder="Last Name">
@@ -143,12 +146,13 @@
                 if(request.getParameter("chainname")!= null && request.getParameter("contactphone")!= null && request.getParameter("Sin")!= null && request.getParameter("familyname")!= null && request.getParameter("givenname")!= null && request.getParameter("Address")!= null && request.getParameter("managerid")!= null){
                     String chain_name = request.getParameter("chainname");
                     String contact_phone = request.getParameter("contactphone");
+                    String title = request.getParameter("title");
                     String sin = request.getParameter("Sin");
                     String family_name = request.getParameter("familyname");
                     String given_name = request.getParameter("givenname");
                     String address = request.getParameter("Address");
                     int manager_id = Integer.parseInt(request.getParameter("managerid"));
-                    Data.addEmployee(sin, family_name, given_name, address, contact_phone, chain_name, manager_id);
+                    Data.addEmployee(sin, family_name, given_name, address, contact_phone, chain_name,title, manager_id);
                 }
             %>">Confirm Update</button>
         </form>
