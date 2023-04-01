@@ -58,7 +58,9 @@
                     String email = request.getParameter("customeremail");
                     info = Data.searchBookings(Lastname,email);
                     Address = (String) session.getAttribute("Address");
-                    Address = info.get(0);
+                    if(Address == null){
+                      Address = info.get(0);
+                    }
                     num_of_rooms = (String) session.getAttribute("num_of_rooms");
                     if (num_of_rooms == null) {
                         num_of_rooms = info.get(1);
