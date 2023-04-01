@@ -5,12 +5,12 @@ import java.util.Calendar;
 
 public class Data{
     public static void main(String[] var0) {
+        searchBookings("Ahmed","biggaymen@gmail.com");
     }
     public static void terminate(int emp_num) {
         try {
             Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Groupproject", "postgres", "1234");
             Statement st = db.createStatement();
-            st.addBatch("DELETE FROM works_at WHERE emp_num = "+emp_num);
             st.addBatch("DELETE FROM employees WHERE emp_num = "+emp_num);
             st.executeBatch();
             System.out.println("Employee "+Integer.toString(emp_num)+" has been removed from database.");
@@ -25,7 +25,6 @@ public class Data{
         try {
             Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Groupproject", "postgres", "1234");
             Statement st = db.createStatement();
-            st.addBatch("DELEtE FROM rents WHERE sin = '"+SIN+"'");
             st.addBatch("DELETE FROM customers WHERE sin = '"+SIN+"'");
             st.executeBatch();
             st.close();
@@ -123,13 +122,13 @@ public class Data{
         try {
             Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Groupproject", "postgres", "1234");
             Statement st = db.createStatement();
-            ResultSet rs = st.executeQuery("SELECT address FROM hotels WHERE contact_phone = (SELECT contact_phone from has WHERE room_id = (SELECT room_id FROM rents WHERE sin = (SELECT sin FROM customers where email = '"+Email+"' AND family_name ='"+LastName+"')))");
+            ResultSet rs = st.executeQuery("SELECT address FROM hotels WHERE contact_phone in (SELECT contact_phone from has WHERE room_id in (SELECT room_id FROM rents WHERE sin = (SELECT sin FROM customers where email = '"+Email+"' AND family_name ='"+LastName+"')))");
             rs.next();
             info.add(rs.getString(1));
             rs = st.executeQuery("SELECT COUNT(room_id) FROM rents WHERE sin = (SELECT sin FROM customers where email = '"+Email+"' AND family_name ='"+LastName+"')");
             rs.next();
             info.add(rs.getString(1));
-            rs = st.executeQuery("SELECT chain_name FROM belongs_to WHERE contact_phone = (SELECT contact_phone from has WHERE room_id = (SELECT room_id FROM rents WHERE sin = (SELECT sin FROM customers where email = '"+Email+"' AND family_name ='"+LastName+"')))");
+            rs = st.executeQuery("SELECT chain_name FROM belongs_to WHERE contact_phone in (SELECT contact_phone from has WHERE room_id = (SELECT room_id FROM rents WHERE sin = (SELECT sin FROM customers where email = '"+Email+"' AND family_name ='"+LastName+"')))");
             rs.next();
             info.add(rs.getString(1));
             rs = st.executeQuery("SELECT sin FROM customers where email = '"+Email+"' AND family_name ='"+LastName+"'");
@@ -137,7 +136,7 @@ public class Data{
             info.add(rs.getString(1));
             st.close();
             db.close();
-
+            return info;
         } catch (SQLException exception) {
             System.out.println(" An exception was thrown:" + exception.getMessage());
         }

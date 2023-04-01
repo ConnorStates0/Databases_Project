@@ -1,4 +1,4 @@
-        <%@page language="java" contentType="text/html; charset=utf-8" pageEncoding="UTF-8"%>
+<%@page language="java" contentType="text/html; charset=utf-8" pageEncoding="UTF-8"%>
 <%@ page import="com.jspData.Data"%>
 <%@ page import="java.sql.*" %>
 <%@ page import="javax.print.DocFlavor" %>
@@ -48,6 +48,7 @@
       <input type="text" name ="customeremail" placeholder="Customer Email">
       </br>
       <button onclick="<%
+                ArrayList<String> info;
                 String Address=null;
                 String num_of_rooms=null;
                 String ChainName=null;
@@ -55,22 +56,20 @@
                 if (request.getParameter("customerlast") != null && request.getParameter("customeremail") != null) {
                     String Lastname = request.getParameter("customerlast");
                     String email = request.getParameter("customeremail");
-                    ArrayList info = Data.searchBookings(Lastname,email);
+                    info = Data.searchBookings(Lastname,email);
                     Address = (String) session.getAttribute("Address");
-                    if (Address == null) {
-                        Address = info.get(0).toString();
-                    }
+                    Address = info.get(0);
                     num_of_rooms = (String) session.getAttribute("num_of_rooms");
                     if (num_of_rooms == null) {
-                        num_of_rooms = info.get(1).toString();
+                        num_of_rooms = info.get(1);
                     }
                     ChainName = (String) session.getAttribute("ChainName");
                     if (ChainName == null) {
-                        ChainName = info.get(2).toString();
+                        ChainName = info.get(2);
                     }
                     CustomerSIN = (String) session.getAttribute("CustomerSIN");
                     if (CustomerSIN == null) {
-                        CustomerSIN = info.get(3).toString();
+                        CustomerSIN = info.get(3);
                     }
                 }
                 %>"; value="">Search for booking</button>
@@ -89,7 +88,7 @@
         class="booking-out"
       >
         <label for="booked-location">Location: <%=Address%></label>
-        <output id="booked-location" name="booked-location">
+        <output id="booked-location" name="booked-location"><output>
       </div>
 
       <div id="num-rooms-out" name="num-rooms-out" class="booking-out">
