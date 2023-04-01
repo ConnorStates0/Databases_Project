@@ -154,14 +154,14 @@ public class Data{
         }
     }
 
-    public static ArrayList<String> RoomSearch(String Start, String End, String RoomCapacity, String Hotel_chain, int Price, String Sea_view, String Extendable){
+    public static ArrayList<String> RoomSearch(String Start, String End, String RoomCapacity, String city, int Price, String Sea_view, String Extendable){
         ArrayList<String> roomids = new ArrayList<String>();
         String entry;
         int i = 0;
         try {
             Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Groupproject", "postgres", "1234");
             Statement st = db.createStatement();
-            ResultSet rs = st.executeQuery("SELECT room_id,price,amenities,problems,contact_phone,rating,address FROM rooms CROSS JOIN hotels WHERE room_id NOT in (SELECT room_id from rents where (CAST('"+Start+"' AS DATE) not between start_date AND end_date) AND (CAST('"+End+"' AS DATE) not between start_date AND end_date) AND room_id in (Select room_id from rooms where sea_view = "+Sea_view+" and is_extendable = "+Extendable+" and capacity = '"+RoomCapacity+"' and price <= "+Price+" and room_id in (select room_id from has where contact_phone in (select contact_phone from belongs_to where chain_name = '"+Hotel_chain+"'))))");
+            ResultSet rs = st.executeQuery("SELECT rating,room_id,price,amenities,problems,contact_phone,address FROM rooms CROSS JOIN hotels WHERE room_id NOT in (SELECT room_id from rents where (CAST('"+Start+"' AS DATE) not between start_date AND end_date) AND (CAST('"+End+"' AS DATE) not between start_date AND end_date) AND room_id in (Select room_id from rooms where sea_view = "+Sea_view+" and is_extendable = "+Extendable+" and capacity = '"+RoomCapacity+"' and price <= "+Price+" and room_id in (select room_id from has where contact_phone in (select contact_phone from hotels where city = '"+city+"'))))");
             while (rs.next() && i < 15){
                 entry = rs.getString(1)+", "+rs.getString(2)+", "+rs.getString(3)+", "+rs.getString(4)+", "+rs.getString(5)+", "+rs.getString(6)+", "+rs.getString(7);
                 roomids.add(entry);

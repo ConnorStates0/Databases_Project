@@ -51,8 +51,8 @@
       <label>Check out: </label>
       <input type="text" name="end" placeholder="Y/M/D" />
       </br>
-      <label>Chain: </label>
-      <input type="text" name="Chain" />
+      <label>City: </label>
+      <input type="text" name="City" />
       </br>
       <label>Capacity: </label>
       <input type="text" name="Capacity"/>
@@ -71,20 +71,20 @@
                 ArrayList<String> rooms=null;
                 String start = request.getParameter("start");
                 String end = request.getParameter("end");
-                if (request.getParameter("Chain") != null && request.getParameter("Capacity") != null) {
-                    String chain = request.getParameter("Chain");
+                if (request.getParameter("City") != null && request.getParameter("Capacity") != null) {
+                    String city = request.getParameter("City");
                     String capacity = request.getParameter("Capacity");
                     int price = Integer.parseInt(request.getParameter("Price"));
                     String seaview = request.getParameter("Seaview");
                     String extendable = request.getParameter("extendable");
-                    rooms = Data.RoomSearch(start, end, capacity, chain, price, seaview, extendable);
+                    rooms = Data.RoomSearch(start, end, capacity, city, price, seaview, extendable);
                     session.setAttribute("rooms", rooms);
                 } %>">Search Available Rooms</button>
     </form>
 
     <h2>Available Rooms:</h2>
     <ul>
-      <label>Room ID, Price, Amenities, Problems, Contact Phone, Hotel Rating, Address</label>
+      <label>Hotel Rating, Room ID, Price, Amenities, Problems, Contact Phone, Address</label>
       <%
         if(rooms != null){for(Object room : rooms.toArray()){%>
       <li><%=room.toString()%></li>

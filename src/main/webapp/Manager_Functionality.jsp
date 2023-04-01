@@ -174,7 +174,7 @@
                     int manager_id = Integer.parseInt(request.getParameter("managerid"));
                     Data.addEmployee(sin, family_name, given_name, address, contact_phone, chain_name,title, manager_id);
                 }
-            %>">Confirm Update</button>
+            %>">You're Hired!</button>
         </form>
     </div>
   </body>
