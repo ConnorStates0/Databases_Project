@@ -1,0 +1,102 @@
+CREATE TABLE employees(
+emp_num SERIAL PRIMARY KEY,
+sin VARCHAR,
+family_name VARCHAR,
+given_name VARCHAR,
+address VARCHAR,
+manager_id SERIAL
+);
+
+CREATE TABLE hotel_chains(
+chain_name VARCHAR PRIMARY KEY,
+office_location VARCHAR,
+num_hotels INTEGER,
+phone_numbers VARCHAR
+);
+
+CREATE TABLE hotels(
+contact_phone VARCHAR PRIMARY KEY,
+contact_email VARCHAR,
+rating DOUBLE PRECISION,
+address VARCHAR,
+num_of_rooms INTEGER,
+manager_id INTEGER,
+city VARCHAR,
+hotel_id SERIAL
+);
+
+CREATE TABLE rooms(
+room_id SERIAL PRIMARY KEY,
+room_num INTEGER,
+price DOUBLE PRECISION,
+amenities VARCHAR,
+capacity VARCHAR,
+sea_view BOOLEAN,
+is_extendable BOOLEAN,
+problems VARCHAR
+);
+
+CREATE TABLE customers(
+sin VARCHAR PRIMARY KEY,
+family_name VARCHAR,
+given_name VARCHAR,
+address varchar,
+email varchar,
+registration_date DATE
+);
+
+CREATE TABLE works_at(
+emp_num INTEGER REFERENCES employees(emp_num),
+contact_phone VARCHAR REFERENCES hotels(contact_phone),
+chain_name VARCHAR REFERENCES hotel_chains(chain_name),
+position_title VARCHAR
+);
+
+CREATE TABLE belongs_to(
+contact_phone VARCHAR REFERENCES hotels(contact_phone),
+chain_name VARCHAR REFERENCES hotel_chains(chain_name)
+);
+
+CREATE TABLE has(
+contact_phone VARCHAR REFERENCES hotels(contact_phone),
+room_id INTEGER REFERENCES rooms(room_id)
+);
+
+CREATE TABLE rents(
+sin VARCHAR REFERENCES customers(sin),
+room_id INTEGER REFERENCES rooms(room_id),
+approved BOOLEAN,
+credit_card VARCHAR,
+start_date DATE,
+end_date DATE
+);
+
+CREATE FUNCTION remove_works_at()
+RETURNS TRIGGER AS $$
+BEGIN
+    DELETE FROM works_at WHERE emp_num = OLD.emp_num;
+    RETURN OLD;
+END;
+$$ Language plpgsql;
+
+CREATE trigger terminate_employee BEFORE DELETE ON employees FOR EACH ROW EXECUTE FUNCTION remove_works_at();
+
+CREATE FUNCTION remove_rents()
+RETURNS TRIGGER AS $$
+BEGIN
+    DELETE FROM rents WHERE sin = OLD.sin;
+    RETURN OLD;
+END;
+$$ Language plpgsql;
+
+CREATE trigger cancel_rents BEFORE DELETE ON customers FOR EACH ROW EXECUTE FUNCTION remove_rents();
+
+Create view hotel_rooms AS select contact_phone, Count(*) as num_rooms from has Group by contact_phone;
+Create view room_by_city AS Select city, SUM(num_of_rooms) AS total_rooms from hotels group by city;
+
+CREATE INDEX employees_sin ON employees(sin);
+CREATE INDEX hotels_phone ON hotels(contact_phone);
+CREATE INDEX has_phone_and_id ON has(contact_phone, room_id);
+
+
+
