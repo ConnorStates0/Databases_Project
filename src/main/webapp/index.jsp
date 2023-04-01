@@ -36,6 +36,7 @@
     </button>
     <table>
       <thead>
+      <h2>Rooms Per Hotel</h2>
         <tr>
           <th>Contact Phone</th>
           <th>Number of Rooms</th>
@@ -54,6 +55,7 @@
     </table>
     <table>
       <thead>
+      <h2>Rooms Per City</h2>
       <tr>
         <th>City</th>
         <th>Number of Rooms</th>
@@ -70,8 +72,8 @@
       </tbody>
     </table>
   </body>
-  <h6>
+  <h5>
     Mustafa Ahmed 300242013| Ashvin Ramanathan 300242541| Connor States
     300254333
-  </h6>
+  </h5>
 </html>
